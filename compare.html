@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Compare 1.0 - Chess Image Rating System</title>
+  <style>
+    body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; gap: 20px; }
+    #image-container { display: flex; gap: 20px; }
+    .image-card { text-align: center; }
+    img { width: 300px; height: 300px; cursor: pointer; object-fit: cover; }
+    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>compare</h1>
+<div id="image-container"></div>
+  <button id="reset-btn">Reset Ratings</button>
+
+  <script>
+    const images = [
+    { id: 1, url: 'brid.jpg', rating: 1000 },
+      { id: 2, url: 'cat.jpg', rating: 1000 },
+      { id: 3, url: 'dog.jpg', rating: 1000 },
+{ id: 4, url: 'lemur.jpg', rating: 1000 },
+{ id: 5, url: 'robin.jpg', rating: 1000 },
+{ id: 6, url: 'dolphin.jpg', rating: 1000 },
+{ id: 7, url: 'cheetah.jpg', rating: 1000 },
+{ id: 8, url: 'lion.jpg', rating: 1000 },
+{ id: 9, url: 'donkey.jpg', rating: 1000 },
+{ id: 10, url: 'blue tongue lizard.jpg', rating: 1000 },
+{ id: 11, url: 'horse.jpg', rating: 1000 },
+{ id: 12, url: 'camal.jpg', rating: 1000 },
+      // Add more images if you want
+    ];
+
+    function calculateEloRating(player1Rating = 1000, player2Rating = 1000, player1Score) {
+      const K = 32;
+      const expectedScore1 = 1 / (1 + Math.pow(10, (player2Rating - player1Rating) / 400));
+      const expectedScore2 = 1 - expectedScore1;
+
+      const player1NewRating = Math.round(player1Rating + K * (player1Score - expectedScore1));
+      const player2NewRating = Math.round(player2Rating + K * ((1 - player1Score) - expectedScore2));
+
+      return { player1NewRating, player2NewRating };
+    }
+
+    function loadRankings() {
+      const savedRankings = JSON.parse(localStorage.getItem('rankings'));
+      if (savedRankings) {
+        savedRankings.forEach((img, index) => {
+          if (images[index]) images[index].rating = img.rating;
+        });
+      }
+    }
+
+    function saveRankings() {
+      localStorage.setItem('rankings', JSON.stringify(images));
+    }
+
+    let currentPair = [];
+
+    function getTwoRandomImages() {
+      let firstIndex = Math.floor(Math.random() * images.length);
+      let secondIndex;
+      do {
+        secondIndex = Math.floor(Math.random() * images.length);
+      } while (secondIndex === firstIndex);
+      return [firstIndex, secondIndex];
+    }
+
+    function renderImages() {
+      const imageContainer = document.getElementById('image-container');
+      imageContainer.innerHTML = '';
+
+      currentPair = getTwoRandomImages();
+
+      currentPair.forEach((index) => {
+        const image = images[index];
+        const div = document.createElement('div');
+        div.className = 'image-card';
+
+        const img = document.createElement('img');
+        img.src = image.url;
+        img.alt = `Image ${image.id}`;
+        img.onclick = () => handleImageClick(index, currentPair.find(i => i !== index));
+
+        const ratingText = document.createElement('p');
+        ratingText.innerText = `Rating: ${image.rating}`;
+
+        div.appendChild(img);
+        div.appendChild(ratingText);
+        imageContainer.appendChild(div);
+      });
+    }
+
+    function handleImageClick(winnerIndex, loserIndex) {
+      const winner = images[winnerIndex];
+      const loser = images[loserIndex];
+      const newRatings = calculateEloRating(winner.rating, loser.rating, 1);
+
+      winner.rating = newRatings.player1NewRating;
+      loser.rating = newRatings.player2NewRating;
+
+      saveRankings();
+      renderImages();
+    }
+
+    function resetRatings() {
+      images.forEach(img => img.rating = 1000);
+      localStorage.removeItem('rankings');
+      renderImages();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadRankings();
+      renderImages();
+      document.getElementById('reset-btn').addEventListener('click', resetRatings);
+    });
+  </script>
+</body>
+</html>
