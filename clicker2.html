@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CLICKER</title>
+
+
+<style>
+
+
+body  {
+background-color:lightblue;
+}
+
+
+.btton {
+width: 250px;
+height: 250px;
+display: flex;
+align-items: center;
+justify-content: center;
+border: 10px solid skyblue;
+background-color: cornflowerblue;
+font-size: 30px;
+padding: 10px;
+border-radius: 500px;
+}
+
+
+.count {
+font-size: 50px;
+padding: 5px;
+border: 5px solid black;
+border-radius: 1000px;
+}
+
+.item {
+width: 250px; 
+height:100px; 
+ top: 100px; 
+display: flex; 
+align-items: center; 
+justify-content:center;
+}
+
+div {
+padding: 15px;
+}
+
+
+.saveload {
+border: 5px solid black;
+border-radius: 1000px;
+padding: 5px;
+background: lightblue ;
+}
+
+.button {
+display: flex;
+justify-content: center;
+align-items: center; 
+font-size: 15px;
+border: 5px solid black;
+border-radius: 1000px;
+width: 250px;
+padding: 5px;
+}
+
+.Customize {
+display: flex; 
+align-items: center; 
+justify-content: center;
+border: 5px solid black;
+padding: 10px;
+flex-direction: column;
+width: 1200px;
+}
+
+.clickme {
+border: 3px solid skyblue;
+border: 10px solid cornflowerblue;
+display: flex; 
+align-items: center; 
+justify-content: center;
+background-color: #088ecc;
+}
+
+
+.borderBtn {
+position: relative;
+border: 10px solid skyblue;
+background-color: #8080ff;
+}
+
+.title {
+font-size: 50px;
+}
+
+.space {
+width: 60%;
+}
+
+.gap {
+padding: 10px;
+}
+
+</style>
+
+</head>
+
+
+
+<body>
+
+ <div>
+<p class="title">Clicker <p>
+<button class="saveload" onclick= "saveCount()"> Save Count</button>
+<button class="saveload" onclick= "clearSavedCounter()">Clear Saved Count</button>
+</div>
+
+
+<div class="borderBtn">
+<div class="clickme">
+<div class="space">
+</div>
+<div id = "item" class="item"><button id="clickBtn" class="btton"  ><p><span id="count" class="count">0</span></p></button></div>
+</div>
+</div>
+<div class="gap">
+</div>
+<div class="Customize">
+<div>
+<h2>Customize</h2>
+</div>
+<div>
+<button class= 'button' onclick="document.body. style.backgroundColor = 'blue'">Change Background to Blue</button>
+</div>
+<div>
+<button class=  'button'  onclick="document.body. style.backgroundColor = 'purple'">Change Background to Purple</button>
+</div>
+<div>
+<button class= 'button' onclick="document.body. style.backgroundColor = 'yellow'">Change Background to Yellow</button>
+</div>
+<div>
+<button class= 'button' onclick="document.body. style.backgroundColor = 'red'">Change Background to Red</button>
+</div>
+<div>
+<button class= 'button' onclick="document.body. style.backgroundColor = 'green'">Change Background to Green</button>
+</div>
+<div>
+<button class= 'button' onclick="document.body. style.backgroundColor = 'cyan'">Change Background to Cyan</button>
+</div>
+<div>
+<button class= 'button' onclick="document.body. style.backgroundColor = 'gray'">Change Background to Gray</button>
+</div>
+<div>
+<button class= 'button' onclick="document.body. style.backgroundColor = 'lightblue'">Change Background to Lightblue</button>
+</div>
+<div>
+<button class= 'button' onclick="document.body. style.backgroundColor = 'white'">Change Background to White</button>
+</div>
+</div>
+
+
+</body>
+
+<script>
+let counter = 0;
+
+const button = document.getElementById('clickBtn');
+const countDisplay = document.getElementById('count');
+const item = document.getElementById('item');
+
+
+button.addEventListener('click' , function() {
+
+counter++;
+countDisplay.textContent = counter;
+});
+
+
+
+ function saveCount() {
+ const count = document.getElementById('count').textContent;
+ localStorage.setItem('savedCounter', count );
+ alert('!_Saved_!');
+  }
+
+  function loadCount() {
+  const saved = localStorage.getItem('savedCounter');
+  if (saved !== null) {
+  document.getElementById('count').textContent = saved ;
+  counter = parseInt(saved);
+  alert('!_Loaded_!');
+  } else {
+  alert('!_No saved post found_!');
+ }
+ }
+
+
+function clearSavedCounter() {
+localStorage.removeItem('savedCounter');
+document.getElementById('count').textContent = '0';
+alert('!_Reload Before Clicking Again After Clear Save_!');
+}
+
+
+window.onload = function () {
+const saved = localStorage.getItem('savedCounter');
+if (saved !== null) {
+document.getElementById('count').textContent = saved;
+counter = parseInt(saved);
+}
+}
+</script>
+
+</html>

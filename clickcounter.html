@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Wack A Mole</title>
+
+
+<style>
+
+body {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+background-color:	#E8C3BA;
+color: #001352;
+}
+
+
+.button {
+display: flex;
+align-items: center;
+justify-content: center;
+height: 50px;
+width: 50px;
+}
+
+
+.count {
+font-size: 30px;
+
+}
+
+.counter {
+display: flex;
+justify-content: center;
+align-items: center;
+padding: 5px;
+}
+
+.saveload {
+border: 5px solid black;
+border-radius: 1000px;
+padding: 5px;
+background: lightblue ;
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+
+<div id="arena" style=" background-color: lightblue; width: 100%; height: 600px; border:10px solid black; position:relative;">
+<div>
+<button class="saveload" onclick= "saveCount()"> Save Count</button>
+<button class="saveload" onclick= "clearSavedCounter()">Clear Saved Count</button>
+</div>
+<div class="counter">
+<h1>wack counter </h1>
+<div class="count">: </div>
+<div>
+<p><span id="count" class="count"> 0 </span></p>
+</div>
+<div id = "item" style="width: 140px; height:150px; background-color: lime; position: absolute; top: 100px; left: 100px; display: flex; justify-content: center; align-content: center;"><button id="clickBtn" class="button"  ><img src= "mule2.jpg"/> </button></div>
+
+
+</body>
+
+
+<script>
+let counter = 0;
+
+
+const button = document.getElementById('clickBtn');
+const countDisplay = document.getElementById('count');
+const arena = document.getElementById('arena');
+const item = document.getElementById('item');
+
+
+button.addEventListener('click' , function() {
+counter++;
+countDisplay.textContent = counter;
+placeItemRandomly() ;
+});
+
+
+function placeItemRandomly() {
+const itemWidth = item.offsetWidth;
+const itemHeight = item.offsetHeight;
+const maxLeft = arena.clientWidth - itemWidth;
+const maxTop =  arena.clientHeight - itemHeight;
+
+
+const randomLeft = Math.floor(Math.random() * maxLeft);
+const randomTop = Math.floor(Math.random() * maxTop);
+
+item.style.left = randomLeft + 'px';
+item.style.top =randomTop + 'px';
+}
+
+ function saveCount() {
+ const count = document.getElementById('count').textContent;
+ localStorage.setItem('savedCounter', count );
+ alert('!_Saved_!');
+  }
+
+  function loadCount() {
+  const saved = localStorage.getItem('savedCounter');
+  if (saved !== null) {
+  document.getElementById('count').textContent = saved ;
+  counter = parseInt(saved);
+  alert('!_Loaded_!');
+  } else {
+  alert('!_No saved post found_!');
+ }
+ }
+
+
+function clearSavedCounter() {
+localStorage.removeItem('savedCounter');
+document.getElementById('count').textContent = '0';
+alert('!_Reload Before Clicking Again After Clear Save_!');
+}
+
+
+window.onload = function () {
+const saved = localStorage.getItem('savedCounter');
+if (saved !== null) {
+document.getElementById('count').textContent = saved;
+counter = parseInt(saved);
+}
+}
+
+placeItemRandomly() ;
+
+
+
+
+
+</script>
+
+
+
+
+
+</html>
